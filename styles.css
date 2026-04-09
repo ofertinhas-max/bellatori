@@ -364,89 +364,116 @@ body {
 }
 
 /* ─── Tutorial ─── */
+
+/* Seta fixa no canto superior direito apontando para os ⋯ do TikTok */
+.tut-pointer {
+  position: fixed;
+  top: 10px;
+  right: 14px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: bouncePointer 1.3s ease-in-out infinite;
+}
+
+.tut-pointer-icon {
+  font-size: 1.3rem;
+  color: var(--rose);
+  filter: drop-shadow(0 2px 8px rgba(196, 135, 122, 0.55));
+}
+
+.tut-pointer-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--rose);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  filter: drop-shadow(0 1px 4px rgba(196, 135, 122, 0.4));
+}
+
+@keyframes bouncePointer {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* Card do tutorial */
 .tut-card {
+  position: relative;
   background: var(--card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  padding: 24px 24px 20px;
-  margin-bottom: 32px;
-  position: relative;
+  padding: 28px 24px 24px;
+  margin-bottom: 24px;
   box-shadow: 0 2px 24px rgba(196, 135, 122, 0.10);
-  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  overflow: hidden;
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 
-.tut-arrow-wrap {
+/* Linha decorativa dourada no topo do card */
+.tut-card::before {
+  content: '';
   position: absolute;
-  top: -10px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  animation: bounceArrow 1.4s ease-in-out infinite;
-}
-
-.tut-arrow {
-  font-size: 2rem;
-  color: var(--rose);
-  line-height: 1;
-  filter: drop-shadow(0 2px 6px rgba(196, 135, 122, 0.4));
-}
-
-.tut-arrow-label {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.65rem;
-  color: var(--rose);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-@keyframes bounceArrow {
-  0%, 100% { transform: translate(0, 0); }
-  50%       { transform: translate(5px, -6px); }
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--rose-light), transparent);
 }
 
 .tut-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 400;
   color: var(--text-dark);
-  margin-bottom: 18px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+
+.tut-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
 }
 
 .tut-steps {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .tut-step {
   display: flex;
   align-items: center;
   gap: 14px;
+  background: rgba(251, 244, 238, 0.6);
+  border: 1px solid rgba(196, 135, 122, 0.12);
+  border-radius: 12px;
+  padding: 12px 16px;
 }
 
 .tut-num {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--rose), var(--mauve));
   color: #fff;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(196, 135, 122, 0.3);
 }
 
 .tut-step p {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-mid);
   line-height: 1.45;
 }
@@ -462,11 +489,14 @@ body {
   justify-content: center;
   gap: 8px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   color: var(--text-light);
   text-decoration: none;
   margin-bottom: 8px;
-  transition: color 0.3s ease, gap 0.3s ease;
+  padding: 10px;
+  border-radius: 10px;
+  transition: color 0.3s ease, background 0.3s ease;
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
 
 .tut-browser-link i {
@@ -476,11 +506,11 @@ body {
 
 .tut-browser-link:hover {
   color: var(--rose);
-  gap: 12px;
+  background: rgba(196, 135, 122, 0.06);
 }
 
 .tut-browser-link:hover i {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 /* ─── Mobile Refinements ─── */
