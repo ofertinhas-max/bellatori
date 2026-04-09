@@ -15,6 +15,35 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <style>
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-6px); }
+      }
+      .tut-pointer {
+        position: fixed;
+        top: 8px;
+        right: 12px;
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        animation: bounce 1.3s ease-in-out infinite;
+      }
+      .tut-pointer i {
+        font-size: 1.2rem;
+        color: #C4877A;
+        filter: drop-shadow(0 2px 6px rgba(196,135,122,0.5));
+      }
+      .tut-pointer span {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #C4877A;
+        line-height: 1;
+      }
+    </style>
   </head>
   <body>
     <div class="orb orb--1"></div>
@@ -22,10 +51,10 @@
     <div class="orb orb--3"></div>
     <div class="noise"></div>
 
-    <!-- Seta fixa apontando para os ⋯ do TikTok -->
+    <!-- Seta pulsando no canto superior direito, apontando para os ⋯ do TikTok -->
     <div class="tut-pointer">
-      <i class="fas fa-arrow-up tut-pointer-icon"></i>
-      <span class="tut-pointer-label">⋯</span>
+      <i class="fas fa-arrow-up"></i>
+      <span>⋯</span>
     </div>
 
     <div class="container">
@@ -46,25 +75,31 @@
         </div>
       </div>
 
-      <!-- Tutorial -->
-      <div class="tut-card">
-        <p class="tut-title">Para ver os produtos</p>
-        <p class="tut-subtitle">Siga os passos abaixo para abrir no navegador:</p>
-        <div class="tut-steps">
-          <div class="tut-step">
-            <span class="tut-num">1</span>
-            <p>Toque nos <strong>⋯</strong> no canto superior direito da tela</p>
-          </div>
-          <div class="tut-step">
-            <span class="tut-num">2</span>
-            <p>Selecione <strong>"Abrir no navegador"</strong></p>
-          </div>
-        </div>
-      </div>
+      <!-- Tutorial usando as classes de card já existentes -->
+      <div class="links">
 
-      <a href="/links" class="tut-browser-link">
-        Já estou no navegador <i class="fas fa-arrow-right"></i>
-      </a>
+        <div class="link" style="cursor: default; pointer-events: none;">
+          <div class="link-img" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#C4877A,#7D4F5C);">
+            <span style="font-family:'DM Sans',sans-serif;font-size:1.5rem;font-weight:700;color:#fff;">1</span>
+          </div>
+          <div class="link-content">
+            <span class="link-name">Toque nos <strong>⋯</strong> no canto superior direito da tela</span>
+          </div>
+          <div class="link-shine"></div>
+        </div>
+
+        <a href="/links" class="link">
+          <div class="link-img" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#C4877A,#7D4F5C);">
+            <span style="font-family:'DM Sans',sans-serif;font-size:1.5rem;font-weight:700;color:#fff;">2</span>
+          </div>
+          <div class="link-content">
+            <span class="link-name">Selecione <strong>"Abrir no navegador"</strong></span>
+            <span class="link-cta">Já estou no navegador <i class="fas fa-arrow-right"></i></span>
+          </div>
+          <div class="link-shine"></div>
+        </a>
+
+      </div>
 
       <div class="social-icons">
         <a href="https://www.instagram.com/brancabellatori" target="_blank" aria-label="Instagram">
