@@ -1,49 +1,84 @@
-// Detecta navegador in-app do TikTok e força abertura no browser externo
+// Detecta navegador in-app e tenta abrir no browser externo
 (function () {
   var ua = navigator.userAgent || '';
-  var isTikTok = /musical_ly|TikTok/i.test(ua);
 
-  // Banner de teste: aparece só dentro do TikTok
-  if (isTikTok) {
-    var banner = document.createElement('div');
-    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0050;color:#fff;text-align:center;padding:12px;font-size:14px;z-index:9999;';
-    banner.innerText = '⚠️ TikTok detectado — redirecionando para o navegador...';
-    document.body.appendChild(banner);
-  }
+  // Detecção ampla: TikTok, Instagram, Facebook, qualquer WebView
+  var isTikTok = /musical_ly|TikTok|BytedanceWebview|ByteLocale|aweme|Bytedance/i.test(ua);
+  var isWebView = /wv|WebView/i.test(ua) && /Android/i.test(ua);
+  var isFBIAB = /FBAN|FBAV|Instagram/i.test(ua);
 
-  if (!isTikTok) return;
+  if (!isTikTok && !isWebView && !isFBIAB) return;
 
-  var url = encodeURIComponent(location.href);
-
-  // Tenta abrir no Chrome (Android e iOS)
-  var chrome = 'googlechrome://' + location.href.replace(/^https?:\/\//, '');
-
-  // Tenta abrir no Safari via intent (iOS)
-  var safari = 'x-safari-' + location.href;
-
-  // Android: intent URL para abrir no browser padrão
-  var intent =
-    'intent://' +
-    location.href.replace(/^https?:\/\//, '') +
-    '#Intent;scheme=https;action=android.intent.action.VIEW;end';
-
+  var currentUrl = location.href;
+  var urlSemProtocolo = currentUrl.replace(/^https?:\/\//, '');
   var isAndroid = /android/i.test(ua);
   var isIOS = /iphone|ipad|ipod/i.test(ua);
 
+  function tentarAbrir(url) {
+    try { location.href = url; } catch (e) {}
+  }
+
+  function tentarForm(url) {
+    try {
+      var form = document.createElement('form');
+      form.method = 'GET';
+      form.action = url;
+      document.body.appendChild(form);
+      form.submit();
+    } catch (e) {}
+  }
+
+  function tentarLink(url) {
+    try {
+      var a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (e) {}
+  }
+
   if (isAndroid) {
-    location.href = intent;
-  } else if (isIOS) {
-    // Tenta Chrome primeiro, depois Safari
-    location.href = chrome;
+    // Tentativa 1: intent para browser padrão
+    tentarAbrir('intent://' + urlSemProtocolo + '#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end');
     setTimeout(function () {
-      location.href = safari;
+      // Tentativa 2: Chrome no Android
+      tentarAbrir('googlechrome://' + urlSemProtocolo);
     }, 500);
     setTimeout(function () {
-      // Fallback: abre o link manualmente via prompt invisível
-      var a = document.createElement('a');
-      a.setAttribute('href', location.href);
-      a.setAttribute('target', '_blank');
-      a.click();
+      // Tentativa 3: link com target blank
+      tentarLink(currentUrl);
     }, 1000);
+    setTimeout(function () {
+      // Tentativa 4: form submit
+      tentarForm('intent://' + urlSemProtocolo + '#Intent;scheme=https;action=android.intent.action.VIEW;end');
+    }, 1500);
+  }
+
+  if (isIOS) {
+    // Tentativa 1: Chrome iOS
+    tentarAbrir('googlechrome://' + urlSemProtocolo);
+    setTimeout(function () {
+      // Tentativa 2: Safari via x-safari
+      tentarAbrir('x-safari-' + currentUrl);
+    }, 500);
+    setTimeout(function () {
+      // Tentativa 3: Safari via safari scheme
+      tentarAbrir('safari-' + currentUrl);
+    }, 800);
+    setTimeout(function () {
+      // Tentativa 4: link com target blank
+      tentarLink(currentUrl);
+    }, 1100);
+    setTimeout(function () {
+      // Tentativa 5: form submit para x-safari
+      tentarForm('x-safari-' + currentUrl);
+    }, 1400);
+    setTimeout(function () {
+      // Tentativa 6: window.open
+      try { window.open(currentUrl, '_blank'); } catch (e) {}
+    }, 1700);
   }
 })();
