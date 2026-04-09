@@ -3,6 +3,14 @@
   var ua = navigator.userAgent || '';
   var isTikTok = /musical_ly|TikTok/i.test(ua);
 
+  // Banner de teste: aparece só dentro do TikTok
+  if (isTikTok) {
+    var banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff0050;color:#fff;text-align:center;padding:12px;font-size:14px;z-index:9999;';
+    banner.innerText = '⚠️ TikTok detectado — redirecionando para o navegador...';
+    document.body.appendChild(banner);
+  }
+
   if (!isTikTok) return;
 
   var url = encodeURIComponent(location.href);
